@@ -1,5 +1,5 @@
-#include "HardwareSerial.h"
-
+// Enabled tracing via serial (currently only with Arduino)
+//#define ENABLE_TRACE
 
 #include "ESP8266_GPIO.h"
 
@@ -8,8 +8,13 @@ extern "C" {
 }
 
 
-#define trace Serial.printf
-//#define trace 
+#ifdef ENABLE_TRACE
+	#include "HardwareSerial.h"
+	#define trace Serial.printf
+#else
+	#define trace 
+#endif
+
 
 
 	
@@ -24,7 +29,7 @@ ESP8266_GPIO::~ESP8266_GPIO()
 }
 	
 
-uint32_t ESP8266_GPIO::getGpioName(uint8_t pinNr)
+unsigned int ESP8266_GPIO::getGpioName(unsigned char pinNr)
 {
   switch (pinNr) {
     case 0:
@@ -57,7 +62,7 @@ uint32_t ESP8266_GPIO::getGpioName(uint8_t pinNr)
   }
 }
 
-uint32_t ESP8266_GPIO::getGpioFunc(uint8_t pinNr)
+unsigned int ESP8266_GPIO::getGpioFunc(unsigned char pinNr)
 {
   switch (pinNr) {
     case 0:
@@ -91,17 +96,17 @@ uint32_t ESP8266_GPIO::getGpioFunc(uint8_t pinNr)
 }
 
 
-bool ESP8266_GPIO::m_bGpioInitCalled = false;
+bool ESP8266_GPIO::ms_bGpioInitCalled = false;
 
-bool ESP8266_GPIO::initPin(uint8_t pinNr, bool output)
+bool ESP8266_GPIO::initPin(unsigned char pinNr, bool output)
 {
-	uint8_t gpioName = getGpioName(pinNr);
-	uint8_t gpioFunc = getGpioFunc(pinNr);
+	unsigned int gpioName = getGpioName(pinNr);
+	unsigned int gpioFunc = getGpioFunc(pinNr);
 	
-	if (!m_bGpioInitCalled)
+	if (!ms_bGpioInitCalled)
 	{
 		gpio_init();
-		m_bGpioInitCalled = true;
+		ms_bGpioInitCalled = true;
 	}
 	
 	if (gpioName != 0xffff && gpioFunc != 0xff)
@@ -124,13 +129,13 @@ bool ESP8266_GPIO::initPin(uint8_t pinNr, bool output)
 }
 
 
-void ESP8266_GPIO::setGpioValue(uint8_t pinNr, bool value)
+void ESP8266_GPIO::setGpioValue(unsigned char pinNr, bool value)
 {
 	GPIO_OUTPUT_SET(GPIO_ID_PIN(pinNr), value ? 1:0);
 }
 
 
-bool ESP8266_GPIO::getGpioValue(uint8_t pinNr)
+bool ESP8266_GPIO::getGpioValue(unsigned char pinNr)
 {
 	return (0 != GPIO_INPUT_GET(GPIO_ID_PIN(pinNr)));
 }
