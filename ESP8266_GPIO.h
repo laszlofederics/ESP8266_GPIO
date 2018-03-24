@@ -1,7 +1,9 @@
 #ifndef ESP8266_GPIO_H_INCLUDED
 #define ESP8266_GPIO_H_INCLUDED
 
-
+/*! \class ESP8266_GPIO
+    \brief Basic functions to access the pins of an esp8266
+*/
 class ESP8266_GPIO
 {
 public:
