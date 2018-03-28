@@ -9,135 +9,142 @@ extern "C" {
 
 
 #ifdef ENABLE_TRACE
-	#include "HardwareSerial.h"
-	#define trace Serial.printf
+    #include "HardwareSerial.h"
+    #define trace Serial.printf
 #else
-	#define trace 
+    #define trace 
 #endif
 
 
 
-	
+    
 ESP8266_GPIO::ESP8266_GPIO()
 {
-	
+    
 }
 
 ESP8266_GPIO::~ESP8266_GPIO()
 {
-	
+    
 }
-	
-
-unsigned int ESP8266_GPIO::getGpioName(unsigned char pinNr)
-{
-  switch (pinNr) {
-    case 0:
-      return PERIPHS_IO_MUX_GPIO0_U;
-    case 1:
-      return PERIPHS_IO_MUX_U0TXD_U;
-    case 2:
-      return PERIPHS_IO_MUX_GPIO2_U;
-    case 3:
-      return PERIPHS_IO_MUX_U0RXD_U;
-    case 4:
-      return PERIPHS_IO_MUX_GPIO4_U;
-    case 5:
-      return PERIPHS_IO_MUX_GPIO5_U;
-    case 9:
-      return PERIPHS_IO_MUX_SD_DATA2_U;
-    case 10:
-      return PERIPHS_IO_MUX_SD_DATA3_U;
-    case 12:
-      return PERIPHS_IO_MUX_MTDI_U;
-    case 13:
-      return PERIPHS_IO_MUX_MTCK_U;
-    case 14:
-      return PERIPHS_IO_MUX_MTMS_U;
-    case 15:
-      return PERIPHS_IO_MUX_MTDO_U;
-    default:
-	  trace("ERROR in ESP8266_GPIO::getGpioName(%d): wrong input", pinNr);	
-      return 0xffff;
-  }
-}
-
-unsigned int ESP8266_GPIO::getGpioFunc(unsigned char pinNr)
-{
-  switch (pinNr) {
-    case 0:
-      return FUNC_GPIO0;
-    case 1:
-      return FUNC_GPIO1;
-    case 2:
-      return FUNC_GPIO2;
-    case 3:
-      return FUNC_GPIO3;
-    case 4:
-      return FUNC_GPIO4;
-    case 5:
-      return FUNC_GPIO5;
-    case 9:
-      return FUNC_GPIO9;
-    case 10:
-      return FUNC_GPIO10;
-    case 12:
-      return FUNC_GPIO12;
-    case 13:
-      return FUNC_GPIO13;
-    case 14:
-      return FUNC_GPIO14;
-    case 15:
-      return FUNC_GPIO15;
-    default:
-      trace("ERROR in ESP8266_GPIO::getGpioFunc(%d): wrong input", pinNr);	
-      return 0xffff;
-  }
-}
-
+    
 
 bool ESP8266_GPIO::ms_bGpioInitCalled = false;
 
 bool ESP8266_GPIO::initPin(unsigned char pinNr, bool output)
-{
-	unsigned int gpioName = getGpioName(pinNr);
-	unsigned int gpioFunc = getGpioFunc(pinNr);
-	
-	if (!ms_bGpioInitCalled)
-	{
-		gpio_init();
-		ms_bGpioInitCalled = true;
-	}
-	
-	if (gpioName != 0xffff && gpioFunc != 0xff)
-	{
-		PIN_FUNC_SELECT(gpioName, gpioFunc);
-		if (output)
-		{
-			gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0);  
-		}
-		else
-		{
-			gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr)); 
-		}
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+{   
+    if (!ms_bGpioInitCalled)
+    {
+        gpio_init();
+        ms_bGpioInitCalled = true;
+    }
+    
+    bool bRet = true;
+    
+    switch (pinNr) {
+    case 0:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO0_U, FUNC_GPIO0);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 1:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_U0TXD_U, FUNC_GPIO1);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 2:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO2_U, FUNC_GPIO2);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 3:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_U0RXD_U, FUNC_GPIO3);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 4:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO4_U, FUNC_GPIO4);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 5:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_GPIO5_U, FUNC_GPIO5);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 9:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_SD_DATA2_U, FUNC_GPIO9);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 10:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_SD_DATA3_U, FUNC_GPIO10);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 12:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDI_U, FUNC_GPIO12);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 13:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTCK_U, FUNC_GPIO13);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 14:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTMS_U, FUNC_GPIO14);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 15:
+      PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDO_U, FUNC_GPIO15);
+      output ? gpio_output_set(0, 0, BIT(GPIO_ID_PIN(pinNr)),0) : gpio_output_set(0, 0, 0, GPIO_ID_PIN(pinNr));
+      break;
+    case 16:
+      if (output)
+      {
+        // mux configuration for XPD_DCDC to output rtc_gpio0
+        WRITE_PERI_REG(PAD_XPD_DCDC_CONF, (READ_PERI_REG(PAD_XPD_DCDC_CONF) & 0xffffffbcUL) | 0x1UL); 
+
+        //mux configuration for out enable
+        WRITE_PERI_REG(RTC_GPIO_CONF, (READ_PERI_REG(RTC_GPIO_CONF) & 0xfffffffeUL) | 0x0UL); 
+        
+        //out enable
+        WRITE_PERI_REG(RTC_GPIO_ENABLE, (READ_PERI_REG(RTC_GPIO_ENABLE) & 0xfffffffeUL) | 0x1UL); 
+      }
+      else
+      {
+        // mux configuration for XPD_DCDC and rtc_gpio0 connection
+        WRITE_PERI_REG(PAD_XPD_DCDC_CONF, (READ_PERI_REG(PAD_XPD_DCDC_CONF) & 0xffffffbcUL) | 0x1UL); 
+
+        //mux configuration for out enable
+        WRITE_PERI_REG(RTC_GPIO_CONF, (READ_PERI_REG(RTC_GPIO_CONF) & 0xfffffffeUL) | 0x0UL); 
+        //out disable
+        WRITE_PERI_REG(RTC_GPIO_ENABLE, READ_PERI_REG(RTC_GPIO_ENABLE) & 0xfffffffeUL);  
+      }
+      break;
+    default:
+      bRet = false;
+      trace("ERROR in ESP8266_GPIO::initPin(%d): wrong input", pinNr);  
+  }
+  
+  return bRet;
 }
 
 
 void ESP8266_GPIO::setGpioValue(unsigned char pinNr, bool value)
 {
-	GPIO_OUTPUT_SET(GPIO_ID_PIN(pinNr), value ? 1:0);
+    if (16 == pinNr)
+    {
+        WRITE_PERI_REG(RTC_GPIO_OUT, (READ_PERI_REG(RTC_GPIO_OUT) & 0xfffffffeUL) | (0x1UL & value));
+    }
+    else
+    {
+        GPIO_OUTPUT_SET(GPIO_ID_PIN(pinNr), value ? 1:0);
+    }
 }
 
 
 bool ESP8266_GPIO::getGpioValue(unsigned char pinNr)
 {
-	return (0 != GPIO_INPUT_GET(GPIO_ID_PIN(pinNr)));
+    if (16 == pinNr)
+    {
+        return (READ_PERI_REG(RTC_GPIO_IN_DATA) & 1UL);
+    }
+    else
+    {
+        return (0 != GPIO_INPUT_GET(GPIO_ID_PIN(pinNr)));
+    }
 }
-		
+        
 
