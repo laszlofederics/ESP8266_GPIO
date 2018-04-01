@@ -69,34 +69,29 @@ void ESP8266_Button::onVeryLongPress()
 void gpioButtonPressed(uint32 mask, void* argument);
 void gpioButtonReleased(uint32 mask, void* argument);
 
+
 /* Set the interrupts to call gpio0ButtonPressed(), if the button on GPIO0 is pressed 
 */
 void ICACHE_FLASH_ATTR ESP8266_Button::waitForButtonPress()
 {
 	trace("%p >>> ESP8266_Button[%d]::waitForButtonPress()\n", this, m_iPinNr);
 	
-	ETS_GPIO_INTR_DISABLE();
-    gpio_intr_handler_register(gpioButtonPressed, this);
-    gpio_pin_intr_state_set (GPIO_ID_PIN(m_iPinNr), GPIO_PIN_INTR_NEGEDGE);
-    ETS_GPIO_INTR_ENABLE();
+	setInterruptForNegativeEdge(m_iPinNr, gpioButtonPressed, this);
 	
 	trace("%p <<< ESP8266_Button[%d]::waitForButtonPress()\n", this, m_iPinNr);
 }
+
 
 /* Set the interrupts to call gpio0ButtonReleased(), if the button on GPIO0 is pressed 
 */
 void ICACHE_FLASH_ATTR ESP8266_Button::waitForButtonRelease()
 {
 	trace("%p >>> ESP8266_Button[%d]::waitForButtonRelease()\n", this, m_iPinNr);
-	
-	ETS_GPIO_INTR_DISABLE();
-    gpio_intr_handler_register(gpioButtonReleased, this);
-    gpio_pin_intr_state_set (GPIO_ID_PIN(m_iPinNr), GPIO_PIN_INTR_POSEDGE);
-    ETS_GPIO_INTR_ENABLE();
+		
+	setInterruptForPositiveEdge(m_iPinNr, gpioButtonReleased, this);
 	
 	trace("%p <<< ESP8266_Button[%d]::waitForButtonRelease()\n", this, m_iPinNr);
 }
-
 
 
 

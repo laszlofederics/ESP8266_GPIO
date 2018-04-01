@@ -28,8 +28,13 @@ protected:
     /*! Reads the value of the pin
     */
     static bool getGpioValue(unsigned char pinNr);
+	
+ 
+	static void setInterruptForPositiveEdge(unsigned char pinNr, void (*handlerFcnt)(unsigned int, void*), void* argument);
+	
     
-    
+	static void setInterruptForNegativeEdge(unsigned char pinNr, void (*handlerFcnt)(unsigned int, void*), void* argument);
+	
 private:
 
     /*! The variable shows, if the SDK function gpio_init() has been called so far.

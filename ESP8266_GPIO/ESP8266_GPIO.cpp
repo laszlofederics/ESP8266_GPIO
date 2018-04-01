@@ -148,3 +148,21 @@ bool ESP8266_GPIO::getGpioValue(unsigned char pinNr)
 }
         
 
+void ESP8266_GPIO::setInterruptForPositiveEdge(unsigned char pinNr, void (*handlerFcnt)(unsigned int, void*), void* argument)
+{
+	ETS_GPIO_INTR_DISABLE();
+    gpio_intr_handler_register(handlerFcnt, argument);
+    gpio_pin_intr_state_set (GPIO_ID_PIN(pinNr), GPIO_PIN_INTR_POSEDGE);
+    ETS_GPIO_INTR_ENABLE();
+}
+	
+    
+void ESP8266_GPIO::setInterruptForNegativeEdge(unsigned char pinNr, void (*handlerFcnt)(unsigned int, void*), void* argument)
+{
+	ETS_GPIO_INTR_DISABLE();
+    gpio_intr_handler_register(handlerFcnt, argument);
+    gpio_pin_intr_state_set (GPIO_ID_PIN(pinNr), GPIO_PIN_INTR_NEGEDGE);
+    ETS_GPIO_INTR_ENABLE();
+}
+	
+	
